@@ -15,13 +15,13 @@ namespace Adam1
         {
             // write your code here
             OutputPort led = new OutputPort(Pins.ONBOARD_LED, false);
-            while (true)
+            /*while (true)
             {
                 led.Write(true); // turn on the LED
                 Thread.Sleep(250); // sleep for 250ms
                 led.Write(false); // turn off the LED
                 Thread.Sleep(250); // sleep for 250ms
-            }
+            }*/
 
         }
 
