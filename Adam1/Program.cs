@@ -11,16 +11,23 @@ namespace Adam1
 {
     public class Program
     {
+        // An output port allows you to write (send a signal) to a pin
+        static OutputPort _led = new OutputPort(Pins.ONBOARD_LED, false);
+        // An input port reads the signal from a pin (Should be Pins.ONBOARD_BTN, but there is a bug)
+        static InputPort _button = new InputPort(Pins.ONBOARD_BTN, false, Port.ResistorMode.Disabled);
+
         public static void Main()
         {
             // write your code here
-            OutputPort led = new OutputPort(Pins.ONBOARD_LED, false);
+
+            // turn the LED off initially
+            _led.Write(false);
+
+            // run forever
             while (true)
             {
-                led.Write(true); // turn on the LED
-                Thread.Sleep(250); // sleep for 250ms
-                led.Write(false); // turn off the LED
-                Thread.Sleep(250); // sleep for 250ms
+                // set the onboard LED output to be the input of the button
+                _led.Write(_button.Read());
             }
 
         }
