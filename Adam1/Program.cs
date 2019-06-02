@@ -13,8 +13,13 @@ namespace Adam1
     {
         // An output port allows you to write (send a signal) to a pin
         static OutputPort _led = new OutputPort(Pins.ONBOARD_LED, false);
-        // An input port reads the signal from a pin (Should be Pins.ONBOARD_BTN, but there is a bug)
-        static InputPort _button = new InputPort(Pins.ONBOARD_BTN, false, Port.ResistorMode.Disabled);
+
+        // An interrupt port raises events when its value changes. in this case, 
+        // we use it to create an event when the button is clicked.
+        // We set the Interrupt mode to raise an event on both edges of the signal;
+        // both down, and up.
+        static InterruptPort _button = new InterruptPort((Cpu.Pin)0x15, false,
+            Port.ResistorMode.Disabled, Port.InterruptMode.InterruptEdgeBoth);
 
         public static void Main()
         {
@@ -23,13 +28,22 @@ namespace Adam1
             // turn the LED off initially
             _led.Write(false);
 
+            // wire up the interrupt to our event handler
+            _button.OnInterrupt += handleButtonClick;
+
             // run forever
             while (true)
             {
-                // set the onboard LED output to be the input of the button
-                _led.Write(_button.Read());
+
             }
 
+        }
+
+        static void handleButtonClick(uint port, uint data, DateTime time)
+        {
+            // will be 1 when pressed (raised high), and 0, when unpressed
+            Debug.Print("Data: " + data.ToString());
+            _led.Write(data == 1);
         }
 
     }
